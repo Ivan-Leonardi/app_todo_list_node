@@ -46,7 +46,7 @@ class UserLoginController {
       const token = jwt.sign({}, secret, {
         subject: String(userFound.id),
         expiresIn,
-      });
+      });     
       
       return res.status(200).json({
         message: "Login realizado com sucesso",

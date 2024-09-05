@@ -14,11 +14,11 @@ export const sqlCreateTasksTable = `
         title VARCHAR(255) NOT NULL,
         description TEXT,
         due_date DATETIME,
-        created_at DATE NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         is_completed BOOLEAN DEFAULT FALSE,
         status ENUM('pending', 'in_progress', 'completed') DEFAULT 'pending',
         user_id INT,
         PRIMARY KEY (id),
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       );
     `;
