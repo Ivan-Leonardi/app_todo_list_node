@@ -18,19 +18,14 @@ function ensureAuthenticated(req, res, next) {
     });
   }
 
-  console.log("Token recebido:", token);
-
   try {
-    const { sub: user_id } = jwt.verify(token, authConfig.JWT.secret);
-    console.log("Secret:", authConfig.JWT.secret);
-
-
+    const { sub: user_id } = jwt.verify(token, authConfig.JWT.secret); 
+    
     req.user = {
       id: Number(user_id),
     };
     return next();
-  } catch (error) {
-    console.log('Erro de token:', error.message)
+  } catch (error) {    
     res.status(401).json({
       message: "JWT token inválido!",
     });
