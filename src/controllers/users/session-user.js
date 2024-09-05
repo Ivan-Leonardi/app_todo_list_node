@@ -1,17 +1,18 @@
 import mysqlConnection from "../../database/mysql/mysqlConnect.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import authConfig from "../../config/auth.js";
 
 dotenv.config();
 
 class UserLoginController {
-  async create() {
+  async create(req, res) {
     const { email, password } = req.body;
 
     const database = mysqlConnection;
 
-    if (!email || password) {
+    if (!email || !password) {
       return res.status(400).json({
         message: "Email e senha obrigatórios",
       });
@@ -39,20 +40,17 @@ class UserLoginController {
           message: "Email ou senha incorreto!",
         });
       }
-      const JWT_SECRET = process.env.JWT_SECRET;
 
-      const token = jwt.sign(
-        {
-          id: userFound.id,
-          email: userFound.email,
-        },
-        JWT_SECRET,
-        {
-          expiresIn: "7d",
-        }
-      );
+      const { secret, expiresIn } = authConfig.JWT;
+
+      const token = jwt.sign({}, secret, {
+        subject: String(userFound.id),
+        expiresIn,
+      });
+      
       return res.status(200).json({
         message: "Login realizado com sucesso",
+        userFound,
         token,
       });
     } catch (error) {

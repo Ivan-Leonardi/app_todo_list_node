@@ -3,9 +3,8 @@ import CreateUserController from "../../controllers/users/create-user.js";
 
 const userRoutes = Router();
 
-const createUserController = new CreateUserController;
+const createUserController = new CreateUserController();
 
-userRoutes.post('/', createUserController.create);
+userRoutes.post("/", createUserController.create);
 
 export default userRoutes;
-
