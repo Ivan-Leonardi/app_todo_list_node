@@ -16,6 +16,8 @@ await createTablesInit();
 app.use(routes);
 app.use(routesTasks);
 
-app.listen(3333, () => {
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
   console.log("Server is running on PORT 3333");
 });
