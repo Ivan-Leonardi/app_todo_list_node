@@ -7,8 +7,7 @@ const createTablesInit = async () => {
     connection = await mysqlConnection.getConnection();
     await connection.query(sqlCreateUsersTable);
     await connection.query(sqlCreateTasksTable);
-
-    console.log("As tabelas fora criadas com sucesso!");
+        
   } catch (error) {
     console.error("Erro ao criar as tabelas:", error);
 } finally {

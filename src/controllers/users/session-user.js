@@ -19,20 +19,20 @@ class UserLoginController {
     }
 
     try {
-      const [user] = await database.query(
+      const [userFound] = await database.query(
         "SELECT * FROM users WHERE email = ?",
         [email]
       );
 
-      if (user.length === 0) {
+      if (userFound.length === 0) {
         return res.status(400).json({ message: "Usuário não encontrado" });
       }
 
-      const userFound = user[0];
+      const user = userFound[0];
 
       const isValidPassword = await bcrypt.compare(
         password,
-        userFound.password
+        user.password
       );
 
       if (!isValidPassword) {
@@ -44,13 +44,14 @@ class UserLoginController {
       const { secret, expiresIn } = authConfig.JWT;
 
       const token = jwt.sign({}, secret, {
-        subject: String(userFound.id),
+        subject: String(user.id),
         expiresIn,
-      });     
+      });      
+     
       
       return res.status(200).json({
         message: "Login realizado com sucesso",
-        userFound,
+        user,
         token,
       });
     } catch (error) {

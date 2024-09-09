@@ -7,7 +7,12 @@ import createTablesInit from "./database/migrations/index.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: "GET, PUT, PATCH, POST, DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+  credentials: true
+}));
 
 app.use(express.json());
 
@@ -19,5 +24,5 @@ app.use(routesTasks);
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-  console.log("Server is running on PORT 3333");
+  console.log("Server is running!");
 });
