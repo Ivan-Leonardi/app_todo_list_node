@@ -8,7 +8,7 @@ import createTablesInit from "./database/migrations/index.js";
 const app = express();
 
 app.use(cors({
-  origin: "https://todo-experts.vercel.app",
+  origin: "https://todo-experts.vercel.app/*",
   methods: "GET, PUT, PATCH, POST, DELETE",
   allowedHeaders: "Content-Type, Authorization",
   credentials: true
