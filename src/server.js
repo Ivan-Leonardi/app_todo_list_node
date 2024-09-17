@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: "https://todo-experts.netlify.app",
+        origin: "https://todo-experts.vercel.app",
         methods: "GET, PUT, PATCH, POST, DELETE",
         allowedHeaders: ["Content-Type, Authorization"],
         credentials: true,
