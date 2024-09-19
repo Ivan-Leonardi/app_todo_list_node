@@ -30,7 +30,7 @@ class CreateTaskController {
 
         const dueDateFormated = format(
             addHours(new Date(due_date), -3),
-            "yyyy-MM-dd HH:mm:ss"
+            "yyyy/MM/dd HH:mm:ss"
         ); // Ajusta para o fuso horário do Brasil (UTC-3)
 
         try {
@@ -48,10 +48,11 @@ class CreateTaskController {
 
             const formattedDueDate = format(
                 new Date(task[0].due_date),
-                "dd-MM-yyyy"
+                "dd/MM/yyyy"
             );
 
             task[0].due_date = formattedDueDate;
+            console.log(task[0])
 
             return res
                 .status(201)
