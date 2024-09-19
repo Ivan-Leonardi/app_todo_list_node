@@ -1,7 +1,7 @@
 <h1 align="center" style="font-weight: bold;">Todo-Experts💻</h1>
 
 <p align="center">
- <a href="#tech">Technologies</a> •
+ <a href="#tech">Tecnologias</a> •
  <a href="#started">Iniciar o projeto</a> •
   <a href="#routes">Endpoints da API</a>
 </p>
