@@ -1,6 +1,7 @@
 import mysqlConnection from "../../database/mysql/mysqlConnect.js";
 import * as yup from "yup";
-import { format, addHours } from "date-fns";
+import { format } from "date-fns";
+
 
 class CreateTaskController {
     async create(req, res) {
@@ -9,7 +10,8 @@ class CreateTaskController {
 
         const database = mysqlConnection;
 
-        const schemaTaks = yup.object().shape({
+        // Validação dos campos com Yup
+        const schemaTask = yup.object().shape({
             title: yup
                 .string()
                 .required("Insira um título")
@@ -18,52 +20,50 @@ class CreateTaskController {
             description: yup
                 .string()
                 .required("Insira uma descrição da sua tarefa")
-                .min(3, "Deve conter no mínimo 3 caracteres"),
+                .min(3, "A descrição deve conter no mínimo 3 caracteres"),
             due_date: yup
                 .date()
                 .required("A data de vencimento é obrigatória")
                 .min(
                     new Date(),
-                    "A data de vencimento não pode ser anterior a data atual"
+                    "A data de vencimento não pode ser anterior à data atual"
                 ),
         });
 
-        const dueDateFormated = format(
-            addHours(new Date(due_date), -3),
-            "yyyy/MM/dd HH:mm:ss"
-        ); // Ajusta para o fuso horário do Brasil (UTC-3)
-
         try {
-            await schemaTaks.validate(req.body);
+            // Valida os dados inseridos
+            await schemaTask.validate(req.body);      
 
+            // Insere a tarefa no banco de dados
             const [result] = await database.query(
                 "INSERT INTO tasks (title, description, due_date, user_id) VALUES (?, ?, ?, ?)",
-                [title, description, dueDateFormated, user_id]
+                [
+                    title,
+                    description,
+                   due_date,
+                    user_id,
+                ]
             );
 
+            // Busca a tarefa recém-criada para retornar
             const [task] = await database.query(
                 "SELECT * FROM tasks WHERE id = ?",
                 [result.insertId]
             );
 
-            const formattedDueDate = format(
-                new Date(task[0].due_date),
-                "dd/MM/yyyy"
-            );
+            // Formata a data para "dd/MM/yyyy" antes de enviar como resposta
+            task[0].due_date = format(new Date(task[0].due_date), "dd/MM/yyyy");
 
-            task[0].due_date = formattedDueDate;
-            console.log(task[0])
-
-            return res
-                .status(201)
-                .json(task[0]);
+            return res.status(201).json(task[0]);
         } catch (error) {
+            // Se for erro de validação, retorna o erro detalhado
             if (error instanceof yup.ValidationError) {
                 return res.status(400).json({
                     message: "Erro na validação dos dados inseridos",
                     errors: error.errors,
                 });
             }
+
             console.error("Erro ao criar a tarefa", error);
             return res.status(500).json({
                 message: "Erro ao criar tarefa!",

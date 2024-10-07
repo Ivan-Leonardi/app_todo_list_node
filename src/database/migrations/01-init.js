@@ -13,7 +13,7 @@ export const sqlCreateTasksTable = `
         id INT AUTO_INCREMENT,
         title VARCHAR(255) NOT NULL,
         description TEXT,
-        due_date DATETIME,
+        due_date DATE,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         is_completed BOOLEAN DEFAULT FALSE,
         status ENUM('pending', 'in_progress', 'completed') DEFAULT 'pending',
